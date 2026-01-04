@@ -62,7 +62,7 @@ class Config:
     TEXT_SEARCH_THRESHOLD = 0.5
     
     # Gemini API
-    _GEMINI_API_KEYS_STR = os.getenv("GEMINI_API_KEY", "AIzaSyB2pcLUeqpwyQB-etr581TZHRSM5fGkSFg")
+    _GEMINI_API_KEYS_STR = os.getenv("GEMINI_API_KEY", "")
     GEMINI_API_KEYS = [k.strip() for k in _GEMINI_API_KEYS_STR.split(",") if k.strip()]
     GEMINI_MODEL = "gemini-2.0-flash-lite"
     
