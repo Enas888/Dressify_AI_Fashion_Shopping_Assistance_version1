@@ -1,0 +1,24 @@
+# Data handling
+pandas
+numpy
+Pillow
+
+# LangChain / HuggingFace
+langchain-huggingface
+transformers
+torch
+langgraph
+langchain
+langchain_community
+
+# FAISS
+faiss-cpu   # or faiss-gpu if you want GPU support
+
+# Gemini / Google GenAI
+fastapi
+uvicorn
+python-multipart
+google-genai
+
+# Optional: for type hints (Python >=3.9 has most built-in)
+typing_extensions
