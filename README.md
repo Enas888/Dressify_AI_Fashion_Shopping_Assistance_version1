@@ -69,4 +69,4 @@ Visit `http://127.0.0.1:8000` in your browser.
 - `assets/`: Dataset (CSV) and pre-built FAISS index.
 
 ## 📜 License
-This project is for educational and portfolio purposes. Data used is from the Fashion Product Images dataset.
+This project is for educational and portfolio purposes. Data used can be acceced from kaggle: https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-dataset.
