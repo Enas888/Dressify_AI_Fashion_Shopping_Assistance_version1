@@ -2,6 +2,15 @@
 
 Dressify AI is an advanced fashion search and recommendation platform powered by AI. It combines visual similarity, natural language processing, and style reasoning to provide a premium shopping experience.
 
+# Interface Example:
+
+## image 1:
+<img width="1558" height="1177" alt="image" src="https://github.com/user-attachments/assets/90d01884-be34-4566-a8d6-4bdfd8053bb0" />
+
+## image 2:
+<img width="1534" height="1174" alt="image" src="https://github.com/user-attachments/assets/5159bc45-58d3-4f6a-9ccb-a8370f1842dc" />
+
+
 ## ✨ Features
 
 - 📸 **Visual Search:** Upload an image of any fashion item to find visually similar products in the catalog using Fashion-CLIP.
