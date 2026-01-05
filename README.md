@@ -22,7 +22,7 @@ Dressify AI is an advanced fashion search and recommendation platform powered by
 
 ## 🚀 Technology Stack
 
-- **ML Models:** Fashion-CLIP (Visual/Text Embeddings), Gemini Pro (Reasoning & Query Generation), Flan-T5 (Classification).
+- **ML Models:** Fashion-CLIP (Visual/Text Embeddings), Gemini Pro (Reasoning & Query Generation), BERT (Fine-tuned Fashion Classifier: `EnasEmad/fashion_cls`), Flan-T5 (Style Generation).
 - **Backend:** FastAPI, Python.
 - **Workflow:** LangGraph.
 - **Vector DB:** FAISS (Fast Approximate Nearest Neighbor Search).
