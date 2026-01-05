@@ -19,6 +19,7 @@ fastapi
 uvicorn
 python-multipart
 google-genai
+python-dotenv
 
 # Optional: for type hints (Python >=3.9 has most built-in)
 typing_extensions
