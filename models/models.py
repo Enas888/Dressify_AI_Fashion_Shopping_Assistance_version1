@@ -33,20 +33,23 @@ print("✅ Fashion-CLIP loaded")
 # ================================================================================
 def safe_invoke(llm, prompt: str) -> str:
     try:
+        # Check if it's a transformers pipeline (for classification)
+        if hasattr(llm, 'task') and llm.task == 'text-classification':
+            res = llm(prompt)
+            return res[0]['label']
+        # Handle LangChain LLMs (for generation)
         return str(llm.invoke(prompt)).strip().replace("</s>", "")
-    except:
+    except Exception as e:
+        print(f"Error in safe_invoke: {e}")
         return "ERROR"
 
 def initialize_llms():
     print("\n🔧 Initializing LLMs...")
     try:
-        tokenizer = AutoTokenizer.from_pretrained(Config.CLASSIFIER_MODEL)
-        model = AutoModelForSeq2SeqLM.from_pretrained(Config.CLASSIFIER_MODEL).to(Config.DEVICE)
-        pipe = pipeline("text2text-generation", model=model, tokenizer=tokenizer, 
-                       device=0 if Config.DEVICE=="cuda" else -1, 
-                       max_new_tokens=Config.MAX_TOKENS_CLASSIFIER, temperature=Config.CLASSIFIER_TEMP)
-        classifier_llm = HuggingFacePipeline(pipeline=pipe)
-        print(f"✅ Classifier: {Config.CLASSIFIER_MODEL}")
+        # Fine-tuned BERT model uses text-classification pipeline
+        classifier_llm = pipeline("text-classification", model=Config.CLASSIFIER_MODEL,
+                                  device=0 if Config.DEVICE=="cuda" else -1)
+        print(f"✅ Classifier (Pipeline): {Config.CLASSIFIER_MODEL}")
     except Exception as e:
         print(f"⚠️ Classifier failed: {e}")
         classifier_llm = None

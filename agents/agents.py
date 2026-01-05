@@ -175,7 +175,7 @@ def non_relevant_image_agent(state: AgentState) -> AgentState:
     reason = state.get('image_validation_reason', 'Image is not fashion-related')
     state['final_response'] = f"📸 **Non-Fashion Image Detected**\n\n{reason}\n\nPlease upload fashion items (clothing, shoes, accessories) for search!"
     state['next_agent'] = 'end'
-    state['messages'].append("❌ Ended: Non-fashion image")
+    state['messages'].append("Ended: Non-fashion image")
     return state
 
 # ================================================================================
@@ -251,53 +251,27 @@ def intent_classifier_agent(state: AgentState) -> AgentState:
         state['messages'].append(f"🎯 Fashion detected ({', '.join(signals)})")
     
     elif classifier_llm:
-        # Dynamic LLM verification
-        sample_items = list(Config.DYNAMIC_FASHION_ITEMS)[:20]
-        sample_colors = list(Config.DYNAMIC_COLORS)[:15]
-        sample_brands = list(Config.DYNAMIC_BRANDS)[:10]
-        
-        categories_text = ""
-        
-        if sample_items:
-            categories_text += f"\n- Fashion Items: {', '.join(sample_items)}"
-        
-        if sample_colors:
-            categories_text += f"\n- Colors: {', '.join(sample_colors)}"
-        
-        if sample_brands:
-            categories_text += f"\n- Brands: {', '.join(sample_brands)}"
-        
-        categories_text += f"\n- Fashion Keywords: shopping, style, outfit, wear, look, trend, material, fabric, size, fit"
-        
-        llm_prompt = f"""Is this query related to fashion?
-
-Query: "{query}"
-
-Fashion includes:{categories_text}
-
-Answer ONLY with YES or NO.
-YES if the query is about ANY of the above fashion categories.
-NO if it's about other topics (food, animals, cars, sports events, general questions).
-
-Answer:"""
-        
+        # Fine-tuned classifier: labels are 'fashion', 'non_fashion', 'welcome'
         try:
-            llm_response = safe_invoke(classifier_llm, llm_prompt).strip().upper()
-            is_fashion = "YES" in llm_response
+            label = safe_invoke(classifier_llm, query).lower()
             
-            if is_fashion:
+            if 'fashion' in label:
                 state['intent'] = 'relevant_fashion'
                 state['next_agent'] = 'fashion_classifier'
-                state['messages'].append(f"🎯 Fashion (LLM verified: {llm_response})")
+                state['messages'].append(f"🎯 Fashion (Classifier: {label})")
+            elif 'welcome' in label:
+                state['intent'] = 'welcome'
+                state['next_agent'] = 'welcome_agent'
+                state['messages'].append(f"🎯 Welcome (Classifier: {label})")
             else:
                 state['intent'] = 'non_relevant'
                 state['next_agent'] = 'non_relevant_agent'
-                state['messages'].append(f"🎯 Non-fashion (LLM: {llm_response})")
+                state['messages'].append(f"🎯 Non-fashion (Classifier: {label})")
         
         except Exception as e:
             state['intent'] = 'non_relevant'
             state['next_agent'] = 'non_relevant_agent'
-            state['messages'].append(f"🎯 Non-fashion (LLM error)")
+            state['messages'].append(f"🎯 Non-fashion (Classifier error)")
     
     else:
         state['intent'] = 'non_relevant'
@@ -400,25 +374,25 @@ def smart_query_understanding_agent(state: AgentState) -> AgentState:
         state['messages'].append(f"⚪ Rule-based: No gender detected")
     
     # LLM-based gender detection (only if needed)
-    if classifier_llm and detected_gender_rule is None:
+    if generator_llm and detected_gender_rule is None:
         available_genders = list(Config.DYNAMIC_GENDERS)
         
         llm_gender_prompt = f"""Analyze this fashion query and determine the target gender.
-
+ 
 Query: "{query}"
-
+ 
 Available genders in our catalog: {', '.join(available_genders)}
-
+ 
 Instructions:
 - If the query mentions men/man/male/boy/his/he/him -> Answer: MEN
 - If the query mentions women/woman/female/girl/her/she -> Answer: WOMEN  
 - If the query mentions both genders -> Answer: BOTH
 - If NO gender is mentioned -> Answer: BOTH (show both genders)
-
+ 
 Answer with ONLY ONE WORD: MEN, WOMEN, or BOTH"""
-
+ 
         try:
-            llm_response = safe_invoke(classifier_llm, llm_gender_prompt).strip().upper()
+            llm_response = safe_invoke(generator_llm, llm_gender_prompt).strip().upper()
             
             if "MEN" in llm_response and "WOMEN" not in llm_response:
                 detected_gender_llm = "men"

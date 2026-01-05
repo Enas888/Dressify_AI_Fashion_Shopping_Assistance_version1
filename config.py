@@ -42,7 +42,7 @@ class Config:
     DYNAMIC_GENDERS = set()
     
     # Models
-    CLASSIFIER_MODEL = "google/flan-t5-large"
+    CLASSIFIER_MODEL = "EnasEmad/fashion_cls"
     GENERATOR_MODEL = "google/flan-t5-base"
     CLIP_MODEL = "patrickjohncyh/fashion-clip"
     
