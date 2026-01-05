@@ -4,10 +4,10 @@ Dressify AI is an advanced fashion search and recommendation platform powered by
 
 # Interface Example:
 
-## image 1:
+## image 1: Searshing by image.
 <img width="1558" height="1177" alt="image" src="https://github.com/user-attachments/assets/90d01884-be34-4566-a8d6-4bdfd8053bb0" />
 
-## image 2:
+## image 2: Searching by Text
 <img width="1534" height="1174" alt="image" src="https://github.com/user-attachments/assets/5159bc45-58d3-4f6a-9ccb-a8370f1842dc" />
 
 
